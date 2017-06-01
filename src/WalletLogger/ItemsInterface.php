@@ -7,7 +7,7 @@ use Slim\Http\Response;
 
 interface ItemsInterface
 {
-    public function getItem();
+    public function getItem(Request $request, Response $response, Array $args);
 
     public function createItem();
 
