@@ -15,7 +15,8 @@ foreach ($app->getContainer()['item_types'] as $item_type) {
         $this->post('', 'WalletLogger\\' . ucfirst($item_type) . 'Controller:createItem');
 
         // Update an item
-        $this->patch('/{id:[0-9]+}', 'WalletLogger\\' . ucfirst($item_type) . 'Controller:updateItem');
+        // Should be more correct use PATCH verb but Slim seems to have problems with getParsedBody method :(
+        $this->post('/{id:[0-9]+}', 'WalletLogger\\' . ucfirst($item_type) . 'Controller:updateItem');
 
         // Delete an item
         $this->delete('/{id:[0-9]+}', 'WalletLogger\\' . ucfirst($item_type) . 'Controller:deleteItem');
@@ -26,5 +27,8 @@ foreach ($app->getContainer()['item_types'] as $item_type) {
  * Generic fallback route
  */
 $app->any('[/{path:.*}]', function ($request, $response, $args) {
-    return $response->withStatus(400)->withJson(['message' => 'Bad request']);
+    return $response->withStatus(400)->withJson([
+        'status' => 400,
+        'message' => 'Bad request',
+    ]);
 });
