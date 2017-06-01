@@ -1,19 +1,23 @@
 <?php
 date_default_timezone_set('Europe/Rome');
 
-$settings = array(
+$settings = [
     'displayErrorDetails' => true,
 
-    'db' => array(
+    'dbConnection' => [
+        'driver' => 'mysql',
         'host' => 'CHOOSE_YOUR_SOURCE_HOST',
-        'user' => 'CHOOSE_YOUR_DB_USER',
-        'pass' => 'CHOOSE_YOUR_DB_PASSWORD',
-        'dbname' => 'wallet_logger',
-    ),
+        'username' => 'CHOOSE_YOUR_DB_USER',
+        'password' => 'CHOOSE_YOUR_DB_PASSWORD',
+        'database' => 'wallet_logger',
+        'charset' => 'utf8',
+        'collation' => 'utf8_unicode_ci',
+        'prefix' => '',
+    ],
 
-    'item_types' => array(
+    'item_types' => [
         'wallets',
         'accounts',
         'transactions'
-    )
-);
+    ],
+];
