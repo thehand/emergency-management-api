@@ -9,5 +9,11 @@ $settings = array(
         'user' => 'CHOOSE_YOUR_DB_USER',
         'pass' => 'CHOOSE_YOUR_DB_PASSWORD',
         'dbname' => 'wallet_logger',
+    ),
+
+    'item_types' => array(
+        'wallets',
+        'accounts',
+        'transactions'
     )
 );
