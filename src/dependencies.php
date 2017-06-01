@@ -17,3 +17,15 @@ $container[\WalletLogger\WalletsController::class] = function (\Slim\Container $
 
     return new \WalletLogger\WalletsController($table);
 };
+
+$container[\WalletLogger\AccountsController::class] = function (\Slim\Container $c) {
+    $table = $c->get('db')->table('accounts');
+
+    return new \WalletLogger\AccountsController($table);
+};
+
+$container[\WalletLogger\TransactionsController::class] = function (\Slim\Container $c) {
+    $table = $c->get('db')->table('transactions');
+
+    return new \WalletLogger\TransactionsController($table);
+};
