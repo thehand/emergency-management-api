@@ -12,11 +12,11 @@ interface ItemsInterface
 
     public function getItem(Request $request, Response $response, Array $args);
 
-    public function createItem();
+    public function createItem(Request $request, Response $response, Array $args);
 
-    public function updateItem();
+    public function updateItem(Request $request, Response $response, Array $args);
 
-    public function deleteItem();
+    public function deleteItem(Request $request, Response $response, Array $args);
 
     public function listItems(Request $request, Response $response, Array $args);
 }
