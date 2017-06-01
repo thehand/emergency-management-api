@@ -4,7 +4,7 @@ namespace WalletLogger;
 
 use Illuminate\Database\Query\Builder;
 
-class WalletsController extends ItemsController
+class AccountsController extends ItemsController
 {
     public function __construct(Builder $table)
     {
