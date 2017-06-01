@@ -6,6 +6,7 @@
 $app->group('/wallets', function () {
     $this->get('', function ($request, $response, $args) {
         // TODO: Use db to retrieve the list of wallets
+        return $response->withStatus(200)->withJson($this->wallets->listItems());
     });
     $this->post('', function ($request, $response, $args) {
         // TODO: Use db to create a new wallet
