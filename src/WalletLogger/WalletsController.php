@@ -2,18 +2,27 @@
 
 namespace WalletLogger;
 
+use Illuminate\Database\Query\Builder;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
 class WalletsController implements ItemsInterface
 {
-    public function listItems(Request $request, Response $response, Array $args)
+    private $table;
+
+    public function __construct(Builder $table)
     {
-        return $response->withStatus(200)->withJson(array(1, 2, 3));
+        $this->table = $table;
     }
 
-    public function getItem()
+    public function listItems(Request $request, Response $response, Array $args)
     {
+        return $response->withStatus(200)->withJson($this->table->get());
+    }
+
+    public function getItem(Request $request, Response $response, Array $args)
+    {
+        return $response->withStatus(200)->withJson($this->table->find($args['id']));
     }
 
     public function createItem()
