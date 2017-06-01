@@ -60,5 +60,5 @@ $app->group('/transactions', function () {
  * Generic fallback route
  */
 $app->any('[/{path:.*}]', function ($request, $response, $args) {
-    return $response->withJson(['message' => 'Bad request'])->withStatus(400);
+    return $response->withStatus(400)->withJson(['message' => 'Bad request']);
 });
