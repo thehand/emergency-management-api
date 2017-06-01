@@ -1,61 +1,26 @@
 <?php
 
 /**
- * Wallets routes
+ * Register routes for each available item types
  */
-$app->group('/wallets', function () {
-    $this->get('', function ($request, $response, $args) {
-        // TODO: Use db to retrieve the list of wallets
-        return $response->withStatus(200)->withJson($this->wallets->listItems());
-    });
-    $this->post('', function ($request, $response, $args) {
-        // TODO: Use db to create a new wallet
-    });
-    $this->patch('/{id:[0-9]+}', function ($request, $response, $args) {
-        // TODO: Use db to update a wallet
-    });
-    $this->delete('/{id:[0-9]+}', function ($request, $response, $args) {
-        // TODO: Use db to delete a wallet
-    });
-});
+foreach ($app->getContainer()['item_types'] as $item_type) {
+    $app->group('/' . $item_type, function () use ($item_type) {
+        // List all items
+        $this->get('', 'WalletLogger\\' . ucfirst($item_type) . 'Controller:listItems');
 
+        // Get item's data
+        $this->get('/{id:[0-9]+}', 'WalletLogger\\' . ucfirst($item_type) . 'Controller:getItem');
 
-/**
- * Accounts routes
- */
-$app->group('/accounts', function () {
-    $this->get('', function ($request, $response, $args) {
-        // TODO: Use db to retrieve the list of accounts
-    });
-    $this->post('', function ($request, $response, $args) {
-        // TODO: Use db to create a new account
-    });
-    $this->patch('/{id:[0-9]+}', function ($request, $response, $args) {
-        // TODO: Use db to update a account
-    });
-    $this->delete('/{id:[0-9]+}', function ($request, $response, $args) {
-        // TODO: Use db to delete a account
-    });
-});
+        // Create a new item
+        $this->post('', 'WalletLogger\\' . ucfirst($item_type) . 'Controller:createItem');
 
+        // Update an item
+        $this->patch('/{id:[0-9]+}', 'WalletLogger\\' . ucfirst($item_type) . 'Controller:updateItem');
 
-/**
- * Transactions routes
- */
-$app->group('/transactions', function () {
-    $this->get('', function ($request, $response, $args) {
-        // TODO: Use db to retrieve the list of transactions
+        // Delete an item
+        $this->delete('/{id:[0-9]+}', 'WalletLogger\\' . ucfirst($item_type) . 'Controller:deleteItem');
     });
-    $this->post('', function ($request, $response, $args) {
-        // TODO: Use db to create a new transaction
-    });
-    $this->patch('/{id:[0-9]+}', function ($request, $response, $args) {
-        // TODO: Use db to update a transaction
-    });
-    $this->delete('/{id:[0-9]+}', function ($request, $response, $args) {
-        // TODO: Use db to delete a transaction
-    });
-});
+}
 
 /**
  * Generic fallback route
