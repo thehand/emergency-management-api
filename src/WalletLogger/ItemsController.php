@@ -105,6 +105,7 @@ class ItemsController implements ItemsInterface
     public function deleteItem(Request $request, Response $response, Array $args)
     {
         try {
+            // TODO: Maybe it can be smarter check first if the item was already deleted?
             $delete = $this->updateDBRow($args['id'], ['deleted_at' => date('Y-m-d H:i:s')]);
             if ($delete) {
                 $output = [
