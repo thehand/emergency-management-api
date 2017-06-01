@@ -55,3 +55,10 @@ $app->group('/transactions', function () {
         // TODO: Use db to delete a transaction
     });
 });
+
+/**
+ * Generic fallback route
+ */
+$app->any('[/{path:.*}]', function ($request, $response, $args) {
+    return $response->withJson(['message' => 'Bad request'])->withStatus(400);
+});
