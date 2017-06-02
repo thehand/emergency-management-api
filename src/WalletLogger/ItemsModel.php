@@ -17,12 +17,18 @@ class ItemsModel
         $this->table = $table;
     }
 
-    public function getList($params)
+    public function getList(array $filters, $order_by = 'id')
     {
-        return $this->table
-            ->orderBy(!empty($params['order_by']) ? $params['order_by'] : 'id')
-            ->get()
-            ->where('deleted_at', null);
+        $results = $this->table
+            ->orderBy($order_by)
+            ->get();
+        foreach ($filters as $filter => $value) {
+            if (in_array($filter, $this->mandatory_fields, false) || in_array($filter, $this->optional_fields, false)) {
+                $results = $results->where($filter, $value);
+            }
+        }
+
+        return $results;
     }
 
     public function getItem($id)
@@ -57,7 +63,7 @@ class ItemsModel
         $item = $this->table->find((int)$item_id);
         if ($item) {
             $parsed_fields = array();
-            $available_fields = array_merge($this->mandatory_fields,$this->optional_fields);
+            $available_fields = array_merge($this->mandatory_fields, $this->optional_fields);
 
             // Clear passed array to leave only mandatory and optional fields
             foreach ($available_fields as $field) {
