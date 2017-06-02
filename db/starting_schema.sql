@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
 DROP TABLE IF EXISTS `transactions`;
 CREATE TABLE IF NOT EXISTS `transactions` (
 	`id` INT NOT NULL AUTO_INCREMENT,
-	`wallet_id` INT NOT NULL,
+	`account_id` INT NOT NULL,
 	`transaction_date` DATETIME NOT NULL,
 	`description` TEXT NOT NULL,
 	`amount` FLOAT(10,2) NOT NULL DEFAULT 0.00,
