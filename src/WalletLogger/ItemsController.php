@@ -62,10 +62,12 @@ class ItemsController implements ItemsControllerInterface
     public function deleteItem(Request $request, Response $response, Array $args)
     {
         try {
-            // TODO: Maybe it can be smarter check first if the item was already deleted?
-            $delete = $this->model->updateItem($args['id'], ['deleted_at' => date('Y-m-d H:i:s')]);
-            if ($delete) {
-                return $this->returnData($response, null);
+            $item = $this->model->getItem($args['id']);
+            if ($item->id > 0 && null === $item->deleted_at) {
+                $delete = $this->model->updateItem($args['id'], ['deleted_at' => date('Y-m-d H:i:s')]);
+                if ($delete) {
+                    return $this->returnData($response, null);
+                }
             }
 
             return $this->returnNotFound($response);
