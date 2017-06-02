@@ -2,17 +2,28 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-// TODO: If settings.php file does not exists throw an exception and warn users
-require __DIR__ . '/../settings.php';
+
+$settings = [];
+if (file_exists(__DIR__ . '/../settings.php')) {
+    require __DIR__ . '/../settings.php';
+} else {
+    throw new \RuntimeException('Settings file is missing.');
+}
 $app = new \Slim\App($settings);
 
 // Register dependencies
-// TODO: If dependencies.php file does not exists throw an exception and warn users
-require __DIR__ . '/../dependencies.php';
+if (file_exists(__DIR__ . '/../dependencies.php')) {
+    require __DIR__ . '/../dependencies.php';
+} else {
+    throw new \RuntimeException('Dependencies file is missing.');
+}
 
 // Register routes
-// TODO: If routes.php file does not exists throw an exception and warn users
-require __DIR__ . '/../routes.php';
+if (file_exists(__DIR__ . '/../routes.php')) {
+    require __DIR__ . '/../routes.php';
+} else {
+    throw new \RuntimeException('Routes file is missing.');
+}
 
 // Run
 $app->run();
