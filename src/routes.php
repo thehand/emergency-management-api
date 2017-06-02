@@ -2,6 +2,7 @@
 /**
  * Register specific routes for each available item types
  */
+/*
 foreach ($app->getContainer()['item_types'] as $item_type) {
     $app->group('/' . $item_type, function () use ($item_type) {
         $this->get('', 'WalletLogger\\' . ucfirst($item_type) . 'Controller:listItems')->setName('getList' . ucfirst($item_type)); // List all items
@@ -12,13 +13,20 @@ foreach ($app->getContainer()['item_types'] as $item_type) {
         $this->delete('/{id:[0-9]+}', 'WalletLogger\\' . ucfirst($item_type) . 'Controller:deleteItem'); // Delete an item
     });
 }
+*/
 
 /**
  * Register routes to follow the hierarchy of items
  */
 $app->group('/wallets', function () use ($app) {
+    $this->get('', 'WalletLogger\WalletsController:listItems'); // List all wallets
+    $this->get('/{id:[0-9]+}', 'WalletLogger\WalletsController:getItem'); // Get a wallet
+    $this->post('', 'WalletLogger\WalletsController:createItem'); // Create a new wallet
+    $this->post('/{id:[0-9]+}', 'WalletLogger\WalletsController:updateItem'); // Update a wallet
+    $this->delete('/{id:[0-9]+}', 'WalletLogger\WalletsController:deleteItem'); // Delete a wallet
+    
     $app->group('/{fk_wallet_id:[0-9]+}/accounts', function () use ($app) {
-        $this->get('', 'WalletLogger\AccountsController:listItems'); // List all accounts
+        $this->get('', 'WalletLogger\AccountsController:listItems'); // List all accounts for a specific wallet
         $this->get('/{id:[0-9]+}', 'WalletLogger\AccountsController:getItem'); // Get an account
         $this->post('', 'WalletLogger\AccountsController:createItem'); // Create a new account
         $this->post('/{id:[0-9]+}', 'WalletLogger\AccountsController:updateItem'); // Update a account
