@@ -16,8 +16,11 @@ class ItemsController implements ItemsControllerInterface
 
     public function listItems(Request $request, Response $response, Array $args)
     {
+        $filters = $args;
+        $filters['deleted_at'] = null;
+
         /** @var Collection $items */
-        $items = $this->model->getList(['order_by' => $this->order_by]);
+        $items = $this->model->getList($filters,$this->order_by);
         if ($items->count() > 0) {
             return $this->returnData($response, $items);
         }
@@ -38,7 +41,8 @@ class ItemsController implements ItemsControllerInterface
     public function createItem(Request $request, Response $response, Array $args)
     {
         try {
-            $item = $this->model->createItem($request->getParsedBody());
+            $params = array_merge($args,$request->getParsedBody());
+            $item = $this->model->createItem($params);
 
             return $this->getItem($request, $response, ['id' => $item]);
         } catch (\Exception $exception) {
