@@ -8,7 +8,7 @@ class TransactionsController extends ItemsController
 {
     public function __construct(Builder $table)
     {
-        parent::__construct($table);
+        $this->model = new Transactions($table);
         $this->order_by = 'transaction_date';
     }
 }

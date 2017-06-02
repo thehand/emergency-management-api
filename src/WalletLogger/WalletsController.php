@@ -8,7 +8,7 @@ class WalletsController extends ItemsController
 {
     public function __construct(Builder $table)
     {
-        parent::__construct($table);
+        $this->model = new Wallets($table);
         $this->order_by = 'name';
     }
 }

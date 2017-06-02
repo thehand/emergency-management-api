@@ -8,7 +8,7 @@ class AccountsController extends ItemsController
 {
     public function __construct(Builder $table)
     {
-        parent::__construct($table);
+        $this->model = new Accounts($table);
         $this->order_by = 'name';
     }
 }
