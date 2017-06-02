@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Register routes for each available item types
  */
@@ -26,9 +25,12 @@ foreach ($app->getContainer()['item_types'] as $item_type) {
 /**
  * Generic fallback route
  */
-$app->any('[/{path:.*}]', function ($request, $response, $args) {
+$app->any('[/{path:.*}]', function (\Slim\Http\Request $request, \Slim\Http\Response $response, Array $args) {
     return $response->withStatus(400)->withJson([
         'status' => 400,
         'message' => 'Bad request',
+        'path' => $args['path'],
+        'method' => $request->getMethod(),
+        'passed_args' => $args
     ]);
 });
