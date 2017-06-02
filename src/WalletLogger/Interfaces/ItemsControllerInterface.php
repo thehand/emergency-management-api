@@ -1,15 +1,14 @@
 <?php
 
-namespace WalletLogger;
+namespace WalletLogger\Interfaces;
 
 use Illuminate\Database\Query\Builder;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use WalletLogger\ItemsModel;
 
-interface ItemsInterface
+interface ItemsControllerInterface
 {
-    public function __construct(Builder $table);
-
     public function getItem(Request $request, Response $response, Array $args);
 
     public function createItem(Request $request, Response $response, Array $args);
@@ -19,4 +18,10 @@ interface ItemsInterface
     public function deleteItem(Request $request, Response $response, Array $args);
 
     public function listItems(Request $request, Response $response, Array $args);
+
+    public function returnData(Response $response, $items);
+
+    public function returnNotFound(Response $response);
+
+    public function returnServerError(Response $response);
 }
