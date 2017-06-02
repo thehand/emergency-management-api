@@ -1,5 +1,6 @@
 {
   "require": {
+    "roave/security-advisories": "dev-master",
     "slim/slim": "^3.8",
     "illuminate/database": "~5.1"
   },
