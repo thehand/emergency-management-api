@@ -11,7 +11,7 @@ class Transactions extends ItemsModel
         parent::__construct($table);
 
         $this->mandatory_fields = [
-            'account_id',
+            'fk_account_id',
             'transaction_date',
             'description',
             'amount',

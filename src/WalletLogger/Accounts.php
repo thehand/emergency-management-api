@@ -12,7 +12,7 @@ class Accounts extends ItemsModel
 
         $this->mandatory_fields = [
             'name',
-            'wallet_id'
+            'fk_wallet_id'
         ];
     }
 }
