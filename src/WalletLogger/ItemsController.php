@@ -2,103 +2,60 @@
 
 namespace WalletLogger;
 
-use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Collection;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use WalletLogger\Interfaces\ItemsControllerInterface;
 
-class ItemsController implements ItemsInterface
+class ItemsController implements ItemsControllerInterface
 {
-    protected $table;
-    protected $order_by;
+    protected $order_by = 'id';
 
-    public function __construct(Builder $table)
-    {
-        /** @var Builder table */
-        $this->table = $table;
-        $this->order_by = 'id';
-    }
+    /** @var ItemsModel $model */
+    protected $model;
 
     public function listItems(Request $request, Response $response, Array $args)
     {
-        $output = [
-            'status' => 404,
-            'message' => 'Not Found',
-            'total_items' => 0,
-            'items' => null,
-        ];
-
-        $items = $this->table->orderBy($this->order_by)->get()->where('deleted_at', null);
-        if (count($items) > 0) {
-            $output = [
-                'status' => 200,
-                'message' => 'OK',
-                'total_items' => count($items),
-                'items' => $items,
-            ];
+        /** @var Collection $items */
+        $items = $this->model->getList(['order_by' => $this->order_by]);
+        if ($items->count() > 0) {
+            return $this->returnData($response, $items);
         }
 
-        return $response->withStatus($output['status'])->withJson($output);
+        return $this->returnNotFound($response);
     }
 
     public function getItem(Request $request, Response $response, Array $args)
     {
-        $output = [
-            'status' => 404,
-            'message' => 'Not Found',
-            'total_items' => 0,
-            'item' => null,
-        ];
-
-        $item = $this->table->find($args['id']);
+        $item = $this->model->getItem($args['id']);
         if ($item->id > 0 && null === $item->deleted_at) {
-            $output = [
-                'status' => 200,
-                'message' => 'OK',
-                'total_items' => 1,
-                'item' => $item,
-            ];
+            return $this->returnData($response, $item);
         }
 
-        return $response->withStatus($output['status'])->withJson($output);
+        return $this->returnNotFound($response);
     }
 
     public function createItem(Request $request, Response $response, Array $args)
     {
-        $post_data = $request->getParsedBody();
-        $output = [
-            'status' => 500,
-            'message' => 'Internal Server Error',
-            'total_items' => 0,
-            'item' => null,
-        ];
-
         try {
-            // TODO: Check if for that user, a wallet with specified name already exists
-            $item = $this->table->insertGetId($post_data);
+            $item = $this->model->createItem($request->getParsedBody());
 
             return $this->getItem($request, $response, ['id' => $item]);
         } catch (\Exception $exception) {
-            // TODO: Maybe log errors?
-            return $response->withStatus($output['status'])->withJson($output);
+            return $this->returnServerError($response);
         }
     }
 
     public function updateItem(Request $request, Response $response, Array $args)
     {
         try {
-            $update = $this->updateDBRow($args['id'], $request->getParsedBody());
+            $update = $this->model->updateItem($args['id'], $request->getParsedBody());
             if ($update) {
                 return $this->getItem($request, $response, $args);
             }
+            return $this->returnServerError($response);
         } catch (\Exception $exception) {
-            // TODO: Maybe log errors?
-            $output = [
-                'status' => 500,
-                'message' => 'Internal Server Error',
-                'total_items' => 0,
-                'item' => null,
-            ];
-            return $response->withStatus(500)->withJson($output);
+            return $this->returnServerError($response);
         }
     }
 
@@ -106,39 +63,52 @@ class ItemsController implements ItemsInterface
     {
         try {
             // TODO: Maybe it can be smarter check first if the item was already deleted?
-            $delete = $this->updateDBRow($args['id'], ['deleted_at' => date('Y-m-d H:i:s')]);
+            $delete = $this->model->updateItem($args['id'], ['deleted_at' => date('Y-m-d H:i:s')]);
             if ($delete) {
-                $output = [
-                    'status' => 200,
-                    'message' => 'OK',
-                    'total_items' => 0,
-                    'item' => null,
-                ];
-
-                return $response->withStatus(200)->withJson($output);
+                return $this->returnData($response, null);
             }
+
+            return $this->returnNotFound($response);
         } catch (\Exception $exception) {
-            $output = [
-                'status' => 500,
-                'message' => 'Internal Server Error',
-                'total_items' => 0,
-                'item' => null,
-            ];
-            return $response->withStatus(500)->withJson($output);
+            return $this->returnServerError($response);
         }
     }
 
-    public function updateDBRow($item_id, Array $updated_data)
+    public function returnData(Response $response, $items)
     {
-        $item = $this->table->find((int)$item_id);
-        if ($item) {
-            try {
-                return $this->table->update($updated_data);
-            } catch (\Exception $exception) {
-                // TODO: Maybe log errors?
-                return false;
-            }
+        $output = [
+            'status' => 200,
+            'message' => 'OK',
+            'total_items' => count($items),
+            'item' => $items,
+        ];
 
-        }
+        return $response->withStatus(200)->withJson($output);
+    }
+
+    public function returnNotFound(Response $response)
+    {
+        $output = [
+            'status' => 404,
+            'message' => 'Not Found',
+            'total_items' => 0,
+            'item' => null,
+        ];
+
+        return $response->withStatus(404)->withJson($output);
+    }
+
+    public function returnServerError(Response $response)
+    {
+        // TODO: Maybe log errors?
+
+        $output = [
+            'status' => 500,
+            'message' => 'Internal Server Error',
+            'total_items' => 0,
+            'item' => null,
+        ];
+
+        return $response->withStatus(500)->withJson($output);
     }
 }
