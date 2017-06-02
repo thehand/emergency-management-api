@@ -21,8 +21,8 @@ class ItemsController implements ItemsInterface
     public function listItems(Request $request, Response $response, Array $args)
     {
         $output = [
-            'status' => 204,
-            'message' => 'No Content',
+            'status' => 404,
+            'message' => 'Not Found',
             'total_items' => 0,
             'items' => null,
         ];
