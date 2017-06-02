@@ -10,7 +10,7 @@ class ItemsModel
 
     public $mandatory_fields = [];
 
-    public $optional_fields = [];
+    public $optional_fields = ['deleted_at'];
 
     public function __construct(Builder $table)
     {
@@ -44,7 +44,9 @@ class ItemsModel
 
         // Clear passed array to leave only mandatory and optional fields
         foreach ($this->optional_fields as $field) {
-            $parsed_fields[$field] = $item_data[$field];
+            if (isset($item_data[$field])) {
+                $parsed_fields[$field] = $item_data[$field];
+            }
         }
 
         return $this->table->insertGetId($parsed_fields);
@@ -59,7 +61,9 @@ class ItemsModel
 
             // Clear passed array to leave only mandatory and optional fields
             foreach ($available_fields as $field) {
-                $parsed_fields[$field] = $updated_data[$field];
+                if (isset($updated_data[$field])) {
+                    $parsed_fields[$field] = $updated_data[$field];
+                }
             }
 
             return $this->table->update($parsed_fields);
