@@ -1,8 +1,8 @@
 # Wallet-Logger
-##Description
+## Description
 Wallet-Logger is an application to log your outgoings and let you make some statistics on them
 
-##Installation
+## Installation
 - launch `composer install` from src/
 - update starting schema using real DB credentials
 - load starting schema into your db    
