@@ -1,5 +1,6 @@
 <?php
 
+/** @var Slim\App $app */
 $container = $app->getContainer();
 
 $container['db'] = function (\Slim\Container $c) {

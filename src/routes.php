@@ -1,4 +1,5 @@
 <?php
+/** @var Slim\App $app */
 
 /**
  * Register routes to follow the hierarchy of items
