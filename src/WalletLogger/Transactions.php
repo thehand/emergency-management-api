@@ -2,13 +2,15 @@
 
 namespace WalletLogger;
 
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Capsule\Manager;
 
 class Transactions extends ItemsModel
 {
-    public function __construct(Builder $table)
+    protected $table_name = 'transactions';
+
+    public function __construct(Manager $db)
     {
-        parent::__construct($table);
+        parent::__construct($db);
 
         $this->mandatory_fields = [
             'fk_account_id',
