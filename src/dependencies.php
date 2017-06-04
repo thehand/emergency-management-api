@@ -14,19 +14,13 @@ $container['db'] = function (\Slim\Container $c) {
 };
 
 $container[\WalletLogger\WalletsController::class] = function (\Slim\Container $c) {
-    $table = $c->get('db')->table('wallets');
-
-    return new \WalletLogger\WalletsController($table);
+    return new \WalletLogger\WalletsController($c->get('db'));
 };
 
 $container[\WalletLogger\AccountsController::class] = function (\Slim\Container $c) {
-    $table = $c->get('db')->table('accounts');
-
-    return new \WalletLogger\AccountsController($table);
+    return new \WalletLogger\AccountsController($c->get('db'));
 };
 
 $container[\WalletLogger\TransactionsController::class] = function (\Slim\Container $c) {
-    $table = $c->get('db')->table('transactions');
-
-    return new \WalletLogger\TransactionsController($table);
+    return new \WalletLogger\TransactionsController($c->get('db'));
 };

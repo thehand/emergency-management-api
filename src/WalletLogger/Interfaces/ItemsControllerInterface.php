@@ -2,13 +2,13 @@
 
 namespace WalletLogger\Interfaces;
 
-use Illuminate\Database\Query\Builder;
 use Slim\Http\Request;
 use Slim\Http\Response;
-use WalletLogger\ItemsModel;
 
 interface ItemsControllerInterface
 {
+    public function listItems(Request $request, Response $response, Array $args);
+
     public function getItem(Request $request, Response $response, Array $args);
 
     public function createItem(Request $request, Response $response, Array $args);
@@ -17,7 +17,7 @@ interface ItemsControllerInterface
 
     public function deleteItem(Request $request, Response $response, Array $args);
 
-    public function listItems(Request $request, Response $response, Array $args);
+    public function getTotalAmount($item_id);
 
     public function returnData(Response $response, $items);
 
