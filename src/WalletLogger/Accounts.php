@@ -6,10 +6,10 @@ use Illuminate\Database\Capsule\Manager;
 
 class Accounts extends ItemsModel
 {
-    protected $table_name = 'accounts';
-
     public function __construct(Manager $db)
     {
+        $this->table_name = 'accounts';
+
         parent::__construct($db);
 
         $this->mandatory_fields = [
