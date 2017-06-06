@@ -23,5 +23,7 @@ interface ItemsControllerInterface
 
     public function returnNotFound(Response $response);
 
+    public function returnNoRecordsFound(Response $response);
+
     public function returnServerError(Response $response);
 }

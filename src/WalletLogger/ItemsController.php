@@ -32,7 +32,7 @@ class ItemsController implements ItemsControllerInterface
             return $this->returnData($response, $items);
         }
 
-        return $this->returnNotFound($response);
+        return $this->returnNoRecordsFound($response);
     }
 
     public function getItem(Request $request, Response $response, Array $args)
@@ -101,6 +101,18 @@ class ItemsController implements ItemsControllerInterface
             'message' => 'OK',
             'total_items' => count($items),
             'item' => $items,
+        ];
+
+        return $response->withStatus(200)->withJson($output);
+    }
+
+    public function returnNoRecordsFound(Response $response)
+    {
+        $output = [
+            'status' => 200,
+            'message' => 'No Records Found',
+            'total_items' => 0,
+            'item' => [],
         ];
 
         return $response->withStatus(200)->withJson($output);
