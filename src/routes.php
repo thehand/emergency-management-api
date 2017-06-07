@@ -9,6 +9,7 @@ $app->group('/wallets', function () use ($app) {
     $this->get('/{id:[0-9]+}', 'WalletLogger\WalletsController:getItem'); // Get a wallet
     $this->post('', 'WalletLogger\WalletsController:createItem'); // Create a new wallet
     $this->post('/{id:[0-9]+}', 'WalletLogger\WalletsController:updateItem'); // Update a wallet
+    $this->options('/{id:[0-9]+}', 'WalletLogger\WalletsController:getItem'); // Enable options method
     $this->delete('/{id:[0-9]+}', 'WalletLogger\WalletsController:deleteItem'); // Delete a wallet
     
     $app->group('/{fk_wallet_id:[0-9]+}/accounts', function () use ($app) {
@@ -16,6 +17,7 @@ $app->group('/wallets', function () use ($app) {
         $this->get('/{id:[0-9]+}', 'WalletLogger\AccountsController:getItem'); // Get an account
         $this->post('', 'WalletLogger\AccountsController:createItem'); // Create a new account
         $this->post('/{id:[0-9]+}', 'WalletLogger\AccountsController:updateItem'); // Update a account
+        $this->options('/{id:[0-9]+}', 'WalletLogger\AccountsController:getItem'); // Enable options method
         $this->delete('/{id:[0-9]+}', 'WalletLogger\AccountsController:deleteItem'); // Delete a account
 
         $app->group('/{fk_account_id:[0-9]+}/transactions', function () {
@@ -23,6 +25,7 @@ $app->group('/wallets', function () use ($app) {
             $this->get('/{id:[0-9]+}', 'WalletLogger\TransactionsController:getItem'); // Get a transaction
             $this->post('', 'WalletLogger\TransactionsController:createItem'); // Create a new transaction
             $this->post('/{id:[0-9]+}', 'WalletLogger\TransactionsController:updateItem'); // Update a transaction
+            $this->options('/{id:[0-9]+}', 'WalletLogger\TransactionsController:getItem'); // Enable options method
             $this->delete('/{id:[0-9]+}', 'WalletLogger\TransactionsController:deleteItem'); // Delete a transaction
         });
     });
@@ -32,7 +35,7 @@ $app->group('/wallets', function () use ($app) {
     return $response
         ->withHeader('Access-Control-Allow-Origin', '*')
         ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-        ->withHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE');
+        ->withHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
 });
 
 /**
