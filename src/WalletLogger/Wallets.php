@@ -13,7 +13,8 @@ class Wallets extends ItemsModel
         parent::__construct($db);
 
         $this->mandatory_fields = [
-            'name'
+            'name',
+            'fk_user_id'
         ];
     }
 }
