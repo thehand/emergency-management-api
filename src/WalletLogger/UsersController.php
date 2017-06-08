@@ -21,8 +21,8 @@ class UsersController implements UsersControllerInterface
         /** @var Collection $user_data */
         $user_data = $this->model->getUserByToken($token);
 
-        if ($user_data->get(0)) {
-            return $user_data->get(0);
+        if ($user_data->count() === 1) {
+            return $user_data->first();
         }
 
         throw new UnauthorizedException('Invalid token or user does not exists');
@@ -40,7 +40,7 @@ class UsersController implements UsersControllerInterface
                 'status' => 200,
                 'message' => 'OK',
                 'total_items' => $user_data->count(),
-                'item' => $user_data->get(0)
+                'item' => $user_data->first()
             ]);
         }
 

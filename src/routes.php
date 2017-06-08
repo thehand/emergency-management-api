@@ -45,7 +45,8 @@ $app->group('/wallets', function () use ($app) {
     ->add($addCORS)
     ->add(new \Slim\Middleware\TokenAuthentication([
         'path' => '/wallets',
-        'authenticator' => $this->authenticator
+        'authenticator' => $this->authenticator,
+        'secure' => false,
     ]));
 
 /**
