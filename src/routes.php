@@ -1,9 +1,19 @@
 <?php
 /** @var Slim\App $app */
+$addCORS = function (\Psr\Http\Message\ServerRequestInterface $req, \Psr\Http\Message\ResponseInterface $res, $next) {
+    /** @var \Psr\Http\Message\ResponseInterface $response */
+    $response = $next($req, $res, null);
+    return $response
+        ->withHeader('Access-Control-Allow-Origin', '*')
+        ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+        ->withHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
+};
 
 /**
  * Register routes to follow the hierarchy of items
  */
+$app->post('/login', 'WalletLogger\UsersController:tryLogin');
+
 $app->group('/wallets', function () use ($app) {
     $this->get('', 'WalletLogger\WalletsController:listItems'); // List all wallets
     $this->get('/{id:[0-9]+}', 'WalletLogger\WalletsController:getItem'); // Get a wallet
@@ -11,7 +21,7 @@ $app->group('/wallets', function () use ($app) {
     $this->post('/{id:[0-9]+}', 'WalletLogger\WalletsController:updateItem'); // Update a wallet
     $this->options('/{id:[0-9]+}', 'WalletLogger\WalletsController:getItem'); // Enable options method
     $this->delete('/{id:[0-9]+}', 'WalletLogger\WalletsController:deleteItem'); // Delete a wallet
-    
+
     $app->group('/{fk_wallet_id:[0-9]+}/accounts', function () use ($app) {
         $this->get('', 'WalletLogger\AccountsController:listItems'); // List all accounts for a specific wallet
         $this->get('/{id:[0-9]+}', 'WalletLogger\AccountsController:getItem'); // Get an account
@@ -29,14 +39,12 @@ $app->group('/wallets', function () use ($app) {
             $this->delete('/{id:[0-9]+}', 'WalletLogger\TransactionsController:deleteItem'); // Delete a transaction
         });
     });
-})->add(function (\Psr\Http\Message\ServerRequestInterface $req, \Psr\Http\Message\ResponseInterface $res, $next) {
-    /** @var \Psr\Http\Message\ResponseInterface $response */
-    $response = $next($req, $res);
-    return $response
-        ->withHeader('Access-Control-Allow-Origin', '*')
-        ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-        ->withHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
-});
+})
+    ->add($addCORS)
+    ->add(new \Slim\Middleware\TokenAuthentication([
+        'path' => '/wallets',
+        'authenticator' => $this->authenticator
+    ]));
 
 /**
  * Generic fallback route
