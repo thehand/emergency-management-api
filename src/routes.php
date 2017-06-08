@@ -1,5 +1,5 @@
 <?php
-/** @var Slim\App $app */
+
 $addCORS = function (\Psr\Http\Message\ServerRequestInterface $req, \Psr\Http\Message\ResponseInterface $res, $next) {
     /** @var \Psr\Http\Message\ResponseInterface $response */
     $response = $next($req, $res, null);
@@ -12,6 +12,8 @@ $addCORS = function (\Psr\Http\Message\ServerRequestInterface $req, \Psr\Http\Me
 /**
  * Register routes to follow the hierarchy of items
  */
+
+/** @var Slim\App $app */
 $app->post('/login', 'WalletLogger\UsersController:tryLogin');
 
 $app->group('/wallets', function () use ($app) {

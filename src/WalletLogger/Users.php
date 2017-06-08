@@ -3,7 +3,6 @@
 namespace WalletLogger;
 
 use Illuminate\Database\Capsule\Manager;
-use Illuminate\Support\Collection;
 use WalletLogger\Interfaces\UsersModelInterface;
 
 class Users implements UsersModelInterface
