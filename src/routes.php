@@ -14,7 +14,7 @@ $addCORS = function (\Psr\Http\Message\ServerRequestInterface $req, \Psr\Http\Me
  */
 
 /** @var Slim\App $app */
-$app->post('/login', 'WalletLogger\UsersController:tryLogin');
+$app->post('/login', 'WalletLogger\UsersController:tryLogin')->add($addCORS);
 
 $app->group('/wallets', function () use ($app) {
     $this->get('', 'WalletLogger\WalletsController:listItems'); // List all wallets
@@ -49,15 +49,3 @@ $app->group('/wallets', function () use ($app) {
         'secure' => false,
     ]));
 
-/**
- * Generic fallback route
- */
-$app->any('[/{path:.*}]', function (\Slim\Http\Request $request, \Slim\Http\Response $response, Array $args) {
-    return $response->withStatus(400)->withJson([
-        'status' => 400,
-        'message' => 'Bad request',
-        'path' => $args['path'],
-        'method' => $request->getMethod(),
-        'passed_args' => $args
-    ]);
-});
