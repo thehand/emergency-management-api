@@ -11,6 +11,7 @@ class WalletsController extends ItemsController
         $this->db = $db;
         $this->model = new Wallets($this->db);
         $this->order_by = 'name';
+        $this->order_by_desc = false;
     }
 
     public function getTotalAmount($item_id)

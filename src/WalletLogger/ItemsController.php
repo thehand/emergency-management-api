@@ -12,6 +12,8 @@ class ItemsController implements ItemsControllerInterface
 {
     protected $order_by = 'id';
 
+    protected $order_by_desc = true;
+
     /** @var ItemsModel $model */
     protected $model;
 
@@ -24,7 +26,7 @@ class ItemsController implements ItemsControllerInterface
         $filters['deleted_at'] = null;
 
         /** @var Collection $items */
-        $items = $this->model->getList($filters,$this->order_by);
+        $items = $this->model->getList($filters,$this->order_by, $this->order_by_desc);
         if ($items->count() > 0) {
             foreach ($items as $k => $item) {
                 $item->total_amount = $this->getTotalAmount($item->id);

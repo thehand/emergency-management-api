@@ -20,11 +20,18 @@ class ItemsModel implements ItemsModelInterface
         $this->table = $db::table($this->table_name);
     }
 
-    public function getList(array $filters, $order_by = 'id')
+    public function getList(array $filters, $order_by = 'id', $desc = true)
     {
-        $results = $this->table
-            ->orderBy($order_by)
-            ->get();
+        if ($desc) {
+            $results = $this->table
+                ->orderByDesc($order_by)
+                ->get();
+        } else {
+            $results = $this->table
+                ->orderBy($order_by)
+                ->get();
+        }
+
         foreach ($filters as $filter => $value) {
             if (in_array($filter, $this->mandatory_fields, false) || in_array($filter, $this->optional_fields, false)) {
                 $results = $results->where($filter, $value);
