@@ -9,58 +9,55 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
-  `username` VARCHAR(255) NOT NULL,
-  `password` VARCHAR(255) NOT NULL,
-  `token` VARCHAR(255) NOT NULL,
+  `device` VARCHAR(255) NOT NULL,
+  `current_zone_id` INT NOT NULL DEFAULT 0,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` DATETIME DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
 
-DROP TABLE IF EXISTS `wallets`;
-CREATE TABLE IF NOT EXISTS `wallets` (
+DROP TABLE IF EXISTS `zones`;
+CREATE TABLE IF NOT EXISTS `zones` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
+  `description` TEXT NOT NULL,
   `fk_user_id` INT NOT NULL,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` DATETIME DEFAULT NULL,
   PRIMARY KEY (`id`),
   FOREIGN KEY (`fk_user_id`)
-  REFERENCES users(`id`)
-    ON DELETE CASCADE
+    REFERENCES users(`id`)
 );
 
-DROP TABLE IF EXISTS `accounts`;
-CREATE TABLE IF NOT EXISTS `accounts` (
+DROP TABLE IF EXISTS `messages`;
+CREATE TABLE IF NOT EXISTS `messages` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `text` VARCHAR(255) NOT NULL,
+  `fk_message_type_id` INT NOT NULL,
+  `fk_zone_id` INT NOT NULL,
+  `fk_user_id` INT NOT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `deleted_at` DATETIME DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`fk_message_type_id`)
+    REFERENCES message_types(`id`),
+  FOREIGN KEY (`fk_zone_id`)
+    REFERENCES zones(`id`),
+  FOREIGN KEY (`fk_user_id`)
+    REFERENCES users(`id`)
+);
+
+DROP TABLE IF EXISTS `message_types`;
+CREATE TABLE IF NOT EXISTS `message_types` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
-  `fk_wallet_id` INT NOT NULL,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` DATETIME DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`fk_wallet_id`)
-    REFERENCES wallets(`id`)
-      ON DELETE CASCADE
-);
-
-DROP TABLE IF EXISTS `transactions`;
-CREATE TABLE IF NOT EXISTS `transactions` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `fk_account_id` INT NOT NULL,
-  `transaction_date` DATETIME NOT NULL,
-  `description` TEXT NOT NULL,
-  `amount` FLOAT(10,2) NOT NULL DEFAULT 0.00,
-  `direction` ENUM('IN','OUT') NOT NULL,
-  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `deleted_at` DATETIME DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`fk_account_id`)
-    REFERENCES accounts(`id`)
-      ON DELETE CASCADE
+  PRIMARY KEY (`id`)
 );
 
 SET FOREIGN_KEY_CHECKS = 1;

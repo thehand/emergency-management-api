@@ -1,6 +1,6 @@
 <?php
 
-namespace WalletLogger;
+namespace EmergencyManagement;
 
 use Illuminate\Database\Capsule\Manager;
 use Slim\App as Slim;
@@ -8,7 +8,7 @@ use Slim\Container;
 use Slim\Http\Request;
 use Slim\Middleware\TokenAuthentication;
 
-class WalletLoggerAPI
+class EmergencyManagementAPI
 {
     /** @var Slim $app */
     private $app;
@@ -31,7 +31,7 @@ class WalletLoggerAPI
             }
         };
 
-        $this->registerRouter();
+        $this->registerRoutes();
     }
 
     private function registerSettings()
@@ -64,20 +64,16 @@ class WalletLoggerAPI
             return new UsersController($c->get('db'));
         };
 
-        $this->app->getContainer()[WalletsController::class] = function (Container $c) {
-            return new WalletsController($c->get('db'));
+        $this->app->getContainer()[ZonesController::class] = function (Container $c) {
+            return new ZonesController($c->get('db'));
         };
 
-        $this->app->getContainer()[AccountsController::class] = function (Container $c) {
-            return new AccountsController($c->get('db'));
-        };
-
-        $this->app->getContainer()[TransactionsController::class] = function (Container $c) {
-            return new TransactionsController($c->get('db'));
+        $this->app->getContainer()[MessagesController::class] = function (Container $c) {
+            return new MessagesController($c->get('db'));
         };
     }
 
-    private function registerRouter()
+    private function registerRoutes()
     {
         // Register routes
         $app = $this->get();

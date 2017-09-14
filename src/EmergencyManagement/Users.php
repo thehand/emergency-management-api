@@ -1,9 +1,9 @@
 <?php
 
-namespace WalletLogger;
+namespace EmergencyManagement;
 
 use Illuminate\Database\Capsule\Manager;
-use WalletLogger\Interfaces\UsersModelInterface;
+use EmergencyManagement\Interfaces\UsersModelInterface;
 
 class Users implements UsersModelInterface
 {
@@ -16,7 +16,7 @@ class Users implements UsersModelInterface
 
     public function getUserByToken($token)
     {
-        return $this->table->get()->where('token', $token);
+        return $this->table->get()->where('device', $token);
     }
 
     public function getUserByCredentials($username, $password)

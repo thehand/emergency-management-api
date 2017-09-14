@@ -1,9 +1,9 @@
 <?php
 
-namespace WalletLogger;
+namespace EmergencyManagement;
 
 use Illuminate\Database\Capsule\Manager;
-use WalletLogger\Interfaces\ItemsModelInterface;
+use EmergencyManagement\Interfaces\ItemsModelInterface;
 
 class ItemsModel implements ItemsModelInterface
 {

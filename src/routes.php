@@ -1,5 +1,4 @@
 <?php
-
 $addCORS = function (\Psr\Http\Message\ServerRequestInterface $req, \Psr\Http\Message\ResponseInterface $res, $next) {
     /** @var \Psr\Http\Message\ResponseInterface $response */
     $response = $next($req, $res, null);
@@ -14,34 +13,30 @@ $addCORS = function (\Psr\Http\Message\ServerRequestInterface $req, \Psr\Http\Me
  */
 
 /** @var Slim\App $app */
-$app->post('/login', 'WalletLogger\UsersController:tryLogin')->add($addCORS);
-
-$app->group('/wallets', function () use ($app) {
-    $this->get('', 'WalletLogger\WalletsController:listItems'); // List all wallets
-    $this->get('/{id:[0-9]+}', 'WalletLogger\WalletsController:getItem'); // Get a wallet
-    $this->post('', 'WalletLogger\WalletsController:createItem'); // Create a new wallet
-    $this->post('/{id:[0-9]+}', 'WalletLogger\WalletsController:updateItem'); // Update a wallet
-    $this->delete('/{id:[0-9]+}', 'WalletLogger\WalletsController:deleteItem'); // Delete a wallet
-
-    $app->group('/{fk_wallet_id:[0-9]+}/accounts', function () use ($app) {
-        $this->get('', 'WalletLogger\AccountsController:listItems'); // List all accounts for a specific wallet
-        $this->get('/{id:[0-9]+}', 'WalletLogger\AccountsController:getItem'); // Get an account
-        $this->post('', 'WalletLogger\AccountsController:createItem'); // Create a new account
-        $this->post('/{id:[0-9]+}', 'WalletLogger\AccountsController:updateItem'); // Update a account
-        $this->delete('/{id:[0-9]+}', 'WalletLogger\AccountsController:deleteItem'); // Delete a account
-
-        $app->group('/{fk_account_id:[0-9]+}/transactions', function () {
-            $this->get('', 'WalletLogger\TransactionsController:listItems'); // List all transactions
-            $this->get('/{id:[0-9]+}', 'WalletLogger\TransactionsController:getItem'); // Get a transaction
-            $this->post('', 'WalletLogger\TransactionsController:createItem'); // Create a new transaction
-            $this->post('/{id:[0-9]+}', 'WalletLogger\TransactionsController:updateItem'); // Update a transaction
-            $this->delete('/{id:[0-9]+}', 'WalletLogger\TransactionsController:deleteItem'); // Delete a transaction
-        });
-    });
+$app->group('/zones', function () {
+    $this->get('', 'EmergencyManagement\ZonesController:listItems'); // List all zones
+    $this->get('/{id:[0-9]+}', 'EmergencyManagement\ZonesController:getItem'); // Get a wallet
+    $this->post('', 'EmergencyManagement\ZonesController:createItem'); // Create a new wallet
+    $this->post('/{id:[0-9]+}', 'EmergencyManagement\ZonesController:updateItem'); // Update a wallet
+    $this->delete('/{id:[0-9]+}', 'EmergencyManagement\ZonesController:deleteItem'); // Delete a wallet
 })
     ->add($addCORS)
     ->add(new \Slim\Middleware\TokenAuthentication([
-        'path' => '/wallets',
+        'path' => '/zones',
+        'authenticator' => $this->authenticator,
+        'secure' => false,
+    ]));
+
+$app->group('/messages', function () {
+    $this->get('', 'EmergencyManagement\MessagesController:listItems'); // List all zones
+    $this->get('/{id:[0-9]+}', 'EmergencyManagement\MessagesController:getItem'); // Get a wallet
+    $this->post('', 'EmergencyManagement\MessagesController:createItem'); // Create a new wallet
+    $this->post('/{id:[0-9]+}', 'EmergencyManagement\MessagesController:updateItem'); // Update a wallet
+    $this->delete('/{id:[0-9]+}', 'EmergencyManagement\MessagesController:deleteItem'); // Delete a wallet
+})
+    ->add($addCORS)
+    ->add(new \Slim\Middleware\TokenAuthentication([
+        'path' => '/zones',
         'authenticator' => $this->authenticator,
         'secure' => false,
     ]));
@@ -50,5 +45,5 @@ $app->group('/wallets', function () use ($app) {
  * Return an empty response for every other routes
  */
 $app->any('[/{path:.*}]', function (\Slim\Http\Request $request, \Slim\Http\Response $response, Array $args) {
-    return $response->withStatus(200);
+    return $response->withStatus(403);
 })->add($addCORS);

@@ -1,6 +1,6 @@
 <?php
 
-namespace WalletLogger\Interfaces;
+namespace EmergencyManagement\Interfaces;
 
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -16,8 +16,6 @@ interface ItemsControllerInterface
     public function updateItem(Request $request, Response $response, Array $args);
 
     public function deleteItem(Request $request, Response $response, Array $args);
-
-    public function getTotalAmount($item_id);
 
     public function returnData(Response $response, $items);
 

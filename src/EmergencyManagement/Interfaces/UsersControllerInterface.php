@@ -1,6 +1,6 @@
 <?php
 
-namespace WalletLogger\Interfaces;
+namespace EmergencyManagement\Interfaces;
 
 use Slim\Http\Request;
 use Slim\Http\Response;

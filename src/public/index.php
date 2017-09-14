@@ -2,5 +2,5 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$app = new \WalletLogger\WalletLoggerAPI();
+$app = new \EmergencyManagement\EmergencyManagementAPI();
 $app->get()->run();

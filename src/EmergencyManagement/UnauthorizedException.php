@@ -1,6 +1,6 @@
 <?php
 
-namespace WalletLogger;
+namespace EmergencyManagement;
 
 use Slim\Middleware\TokenAuthentication\UnauthorizedExceptionInterface;
 

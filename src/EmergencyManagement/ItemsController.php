@@ -1,12 +1,12 @@
 <?php
 
-namespace WalletLogger;
+namespace EmergencyManagement;
 
 use Illuminate\Database\Capsule\Manager;
 use Illuminate\Support\Collection;
 use Slim\Http\Request;
 use Slim\Http\Response;
-use WalletLogger\Interfaces\ItemsControllerInterface;
+use EmergencyManagement\Interfaces\ItemsControllerInterface;
 
 class ItemsController implements ItemsControllerInterface
 {
@@ -28,9 +28,6 @@ class ItemsController implements ItemsControllerInterface
         /** @var Collection $items */
         $items = $this->model->getList($filters,$this->order_by, $this->order_by_desc);
         if ($items->count() > 0) {
-            foreach ($items as $k => $item) {
-                $item->total_amount = $this->getTotalAmount($item->id);
-            }
             return $this->returnData($response, $items);
         }
 
@@ -41,8 +38,6 @@ class ItemsController implements ItemsControllerInterface
     {
         $item = $this->model->getItem($args['id']);
         if ($item->id > 0 && null === $item->deleted_at) {
-            $item->total_amount = $this->getTotalAmount($item->id);
-
             return $this->returnData($response, $item);
         }
 
@@ -89,11 +84,6 @@ class ItemsController implements ItemsControllerInterface
         } catch (\Exception $exception) {
             return $this->returnServerError($response);
         }
-    }
-
-    public function getTotalAmount($item_id)
-    {
-        return 0;
     }
 
     public function returnData(Response $response, $items)

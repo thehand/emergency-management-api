@@ -1,11 +1,11 @@
 <?php
 
-namespace WalletLogger;
+namespace EmergencyManagement;
 
 use Illuminate\Support\Collection;
 use Slim\Http\Request;
 use Slim\Http\Response;
-use WalletLogger\Interfaces\UsersControllerInterface;
+use EmergencyManagement\Interfaces\UsersControllerInterface;
 
 class UsersController implements UsersControllerInterface
 {

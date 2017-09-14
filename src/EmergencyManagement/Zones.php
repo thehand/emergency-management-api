@@ -1,19 +1,20 @@
 <?php
 
-namespace WalletLogger;
+namespace EmergencyManagement;
 
 use Illuminate\Database\Capsule\Manager;
 
-class Wallets extends ItemsModel
+class Zones extends ItemsModel
 {
     public function __construct(Manager $db)
     {
-        $this->table_name = 'wallets';
+        $this->table_name = 'zones';
 
         parent::__construct($db);
 
         $this->mandatory_fields = [
             'name',
+            'description',
             'fk_user_id'
         ];
     }
